@@ -2,5 +2,5 @@
 
 Following components are wrapped:
 
-- `SFSafariViewController` in `SafariView``
+- `SFSafariViewController` in `SafariView`
 - `UISearchBar` in `SearchBarView`

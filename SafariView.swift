@@ -25,7 +25,7 @@ public struct SafariView: UIViewControllerRepresentable {
     private class State: ObservableObject {
         var preferredBarTintColor: UIColor?
         var preferredControlTintColor: UIColor?
-        var dismissButtonStyle: DismissButtonStyle = .done
+        var dismissButtonStyle: SFSafariViewController.DismissButtonStyle = .done
         var entersReaderIfAvailable = false
         var barCollapsingEnabled = true
     }
@@ -52,7 +52,7 @@ public struct SafariView: UIViewControllerRepresentable {
                                        context: UIViewControllerRepresentableContext<SafariView>) {
         uiViewController.preferredBarTintColor = state.preferredBarTintColor
         uiViewController.preferredControlTintColor = state.preferredControlTintColor
-        uiViewController.dismissButtonStyle = state.dismissButtonStyle.rawValue
+        uiViewController.dismissButtonStyle = state.dismissButtonStyle
     }
 }
 
@@ -84,7 +84,14 @@ public extension SafariView {
     ///
     /// All values will show a string localized to the user's locale.
     func dismissButtonStyle(_ style: DismissButtonStyle) -> Self {
-        state.dismissButtonStyle = style
+        switch style {
+        case .done:
+            state.dismissButtonStyle = .done
+        case .close:
+            state.dismissButtonStyle = .close
+        case .cancel:
+            state.dismissButtonStyle = .cancel
+        }
         return self
     }
 
@@ -100,16 +107,6 @@ public extension SafariView {
     func barCollapsingEnabled(_ value: Bool) -> Self {
         state.barCollapsingEnabled = value
         return self
-    }
-}
-
-private extension SafariView.DismissButtonStyle {
-    var rawValue: SFSafariViewController.DismissButtonStyle {
-        switch self {
-        case .done: return .done
-        case .close: return .close
-        case .cancel: return .cancel
-        }
     }
 }
 

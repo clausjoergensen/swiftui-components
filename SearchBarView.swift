@@ -1,3 +1,6 @@
+// Copyright (c) 2020 Claus Jørgensen
+// This code is licensed under MIT license (see LICENSE.txt for details)
+
 import SwiftUI
 import UIKit
 

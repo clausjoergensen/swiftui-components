@@ -275,8 +275,8 @@ public extension SearchBarView {
     }
 
     /// Sets a custom input accessory view for the keyboard of the search bar.
-    func inputAccessoryView<TView>(_ inputAccessoryView: TView?) -> Self where TView: View {
-        let hostingViewController = UIHostingController(rootView: inputAccessoryView)
+    func inputAccessoryView<TView>(@ViewBuilder _ content: () -> TView) -> Self where TView: View {
+        let hostingViewController = UIHostingController(rootView: content())
         return self.inputAccessoryView(hostingViewController.view)
     }
 

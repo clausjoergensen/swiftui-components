@@ -35,7 +35,7 @@ public struct SearchBarView: UIViewRepresentable {
     private var bookmarkButtonClicked: () -> Void
     private var cancelButtonClicked: () -> Void
     private var resultsListButtonClicked: () -> Void
-    private var shouldChangeTextIn: (Range<String.Index>, String) -> (Bool)
+    private var shouldChangeTextIn: (Range<Int>, String) -> (Bool)
     private var placeholder: String
 
     private class State: ObservableObject {
@@ -85,10 +85,10 @@ public struct SearchBarView: UIViewRepresentable {
     ///   - resultsListButtonClicked: An action thats called when the user tapped on the search results list button.
     public init(placeholder: String = "",
                 value: Binding<String>,
-                shouldBeginEditing: Binding<Bool> = .constant(false),
+                shouldBeginEditing: Binding<Bool> = .constant(true),
                 shouldEndEditing: Binding<Bool> = .constant(false),
                 selectedScopeButtonIndex: Binding<Int> = .constant(0),
-                shouldChangeTextIn: @escaping (Range<String.Index>, String) -> (Bool) = { _, _ in false },
+                shouldChangeTextIn: @escaping (Range<Int>, String) -> (Bool) = { _, _ in true },
                 onEditingChanged: @escaping (Bool) -> Void = { _ in },
                 searchButtonClicked: @escaping () -> Void = {},
                 bookmarkButtonClicked: @escaping () -> Void = {},
@@ -169,7 +169,7 @@ public struct SearchBarView: UIViewRepresentable {
         }
 
         public func searchBar(_ searchBar: UISearchBar, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-            guard let range = Range(range, in: text) else { return false }
+            guard let range = Range(range) else { return false }
             return parent.shouldChangeTextIn(range, text)
         }
 
@@ -275,12 +275,8 @@ public extension SearchBarView {
     }
 
     /// Sets a custom input accessory view for the keyboard of the search bar.
-    func inputAccessoryView<T>(_ view: T?) -> Self where T: View {
-        if let view = view {
-            state.inputAccessoryView = UIHostingController<T>(rootView: view).view
-        } else {
-            state.inputAccessoryView = nil
-        }
+    func inputAccessoryView(_ inputAccessoryView: UIView?) -> Self {
+        state.inputAccessoryView = inputAccessoryView
         return self
     }
 
